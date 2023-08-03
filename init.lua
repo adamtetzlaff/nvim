@@ -16,7 +16,7 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
-	{ "folke/which-key.nvim", opts = {} },
+	{ "folke/which-key.nvim", event = "VeryLazy", opts = {} },
 	{ "lewis6991/gitsigns.nvim" },
 	{
 		"catppuccin/nvim",
@@ -30,6 +30,9 @@ require("lazy").setup({
 				integrations = {
 					cmp = true,
 					gitsigns = true,
+					telescope = {
+						enabled = true,
+					},
 					treesitter = true,
 				},
 			})
@@ -41,6 +44,9 @@ require("lazy").setup({
 		dependencies = { "nvim-tree/nvim-web-devicons", opts = {} },
 		opts = {
 			theme = "catppuccin",
+			sections = {
+				lualine_c = { { "filename", path = 1 } },
+			},
 		},
 	},
 	{ "numToStr/Comment.nvim", opts = {} },
@@ -104,7 +110,7 @@ require("lazy").setup({
 
 			cmp.setup({
 				mapping = {
-					["<c-space>"] = cmp.mapping.complete(),
+					["<C-space>"] = cmp.mapping.complete(),
 					["<cr>"] = cmp.mapping.confirm({ select = true }),
 				},
 			})
@@ -169,6 +175,55 @@ require("lazy").setup({
 					null_ls.builtins.formatting.stylua,
 				},
 			})
+		end,
+	},
+	{
+		"nvim-telescope/telescope.nvim",
+		branch = "0.1.x",
+		dependencies = { "nvim-lua/plenary.nvim" },
+		opts = {
+			defaults = {
+				sorting_strategy = "ascending",
+				layout_config = {
+					horizontal = {
+						prompt_position = "top",
+					},
+				},
+			},
+		},
+		config = function(_, opts)
+			require("telescope").setup(opts)
+
+			local builtin = require("telescope.builtin")
+
+			vim.keymap.set("n", "<leader>ff", builtin.find_files, {})
+			vim.keymap.set("n", "<leader>fa", function()
+				builtin.find_files({ follow = true, no_ignore = true, hidden = true })
+			end, {})
+			vim.keymap.set("n", "<leader>fw", builtin.live_grep, {})
+			vim.keymap.set("n", "<leader>fb", builtin.buffers, {})
+			vim.keymap.set("n", "<leader>fh", builtin.help_tags, {})
+			vim.keymap.set("n", "<leader>fo", builtin.oldfiles, {})
+			vim.keymap.set("n", "<leader>fz", builtin.current_buffer_fuzzy_find, {})
+		end,
+	},
+	{
+		"nvim-tree/nvim-tree.lua",
+		version = "*",
+		lazy = false,
+		dependencies = {
+			"nvim-tree/nvim-web-devicons",
+		},
+		opts = {
+			view = {
+				width = 50,
+			},
+		},
+		config = function(_, opts)
+			require("nvim-tree").setup(opts)
+
+			vim.keymap.set("n", "<C-n>", "<cmd>NvimTreeToggle<cr>")
+			vim.keymap.set("n", "<leader>e", "<cmd>NvimTreeFocus<cr>")
 		end,
 	},
 })
