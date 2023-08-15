@@ -105,8 +105,12 @@ require("lazy").setup({
 			require("lsp-zero.cmp").extend()
 
 			-- And you can configure cmp even more, if you want to.
+			local cmp_autopairs = require("nvim-autopairs.completion.cmp")
 			local cmp = require("cmp")
 			local cmp_action = require("lsp-zero.cmp").action()
+
+			-- Insert '(' after selecting function
+			cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 
 			cmp.setup({
 				mapping = {
@@ -137,12 +141,25 @@ require("lazy").setup({
 				ensure_installed = { "jsonls", "lua_ls", "tailwindcss", "tsserver", "yamlls" },
 			})
 
-			local lsp = require("lsp-zero")
+			local lsp = require("lsp-zero").preset({})
 
 			lsp.on_attach(function(_, bufnr)
 				-- see :help lsp-zero-keybindings
 				-- to learn the available actions
-				lsp.default_keymaps({ buffer = bufnr })
+				vim.keymap.set("n", "gD", vim.lsp.buf.declaration)
+				vim.keymap.set("n", "gd", "<cmd>Telescope lsp_definitions<cr>")
+				vim.keymap.set("n", "K", vim.lsp.buf.hover)
+				vim.keymap.set("n", "gi", vim.lsp.buf.implementation)
+				vim.keymap.set("n", "<leader>ls", vim.lsp.buf.signature_help)
+				vim.keymap.set("n", "<leader>D", vim.lsp.buf.type_definition)
+				vim.keymap.set("n", "<leader>ra", vim.lsp.buf.rename)
+				vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action)
+				vim.keymap.set("n", "gr", "<cmd>Telescope lsp_references<cr>")
+				vim.keymap.set("n", "[d", vim.diagnostic.goto_prev)
+				vim.keymap.set("n", "]d", vim.diagnostic.goto_next)
+				vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist)
+				vim.keymap.set("n", "<leader>wa", vim.lsp.buf.add_workspace_folder)
+				vim.keymap.set("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder)
 			end)
 
 			-- (Optional) Configure lua language server for neovim
@@ -187,6 +204,11 @@ require("lazy").setup({
 				layout_config = {
 					horizontal = {
 						prompt_position = "top",
+					},
+				},
+				mappings = {
+					n = {
+						["d"] = "delete_buffer",
 					},
 				},
 			},
