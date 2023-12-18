@@ -279,4 +279,12 @@ require("lazy").setup({
 			vim.keymap.set("n", "<leader>e", "<cmd>NvimTreeFocus<cr>")
 		end,
 	},
+	{
+		"akinsho/bufferline.nvim",
+		version = "*",
+		dependencies = "nvim-tree/nvim-web-devicons",
+		config = function()
+			require("bufferline").setup({})
+		end,
+	},
 })
