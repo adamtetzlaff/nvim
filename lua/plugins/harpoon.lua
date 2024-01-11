@@ -14,5 +14,11 @@ return {
 		vim.keymap.set("n", "<leader>e", function()
 			harpoon.ui:toggle_quick_menu(harpoon:list())
 		end)
+		vim.keymap.set("n", "<Tab>", function()
+			harpoon:list():next()
+		end)
+		vim.keymap.set("n", "<S-Tab>", function()
+			harpoon:list():prev()
+		end)
 	end,
 }
