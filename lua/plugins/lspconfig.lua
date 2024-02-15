@@ -15,7 +15,7 @@ return {
 
 			require("mason").setup({})
 			require("mason-lspconfig").setup({
-				ensure_installed = { "jsonls", "lua_ls", "tailwindcss", "tsserver", "yamlls" },
+				ensure_installed = { "jsonls", "lua_ls", "tailwindcss", "tsserver", "yamlls", "rust_analyzer" },
 			})
 
 			local lsp = require("lsp-zero").preset({})
